@@ -1,0 +1,128 @@
+/* Every class is prefixed ws- so the Squarespace site's own CSS (.field, .row, .label…) can't reach it */
+.ncbws * { box-sizing: border-box; margin: 0; padding: 0; }
+
+.ncbws {
+  --navy: #3B3C56;
+  --navy-dark: #2e2f45;
+  --ink: #1d231c;
+  --base: #FDFDFB;
+  --tint: #E9F1F7;
+  --label: #7e80a0;
+  --border: #d7d9e3;
+  --line: #ececf1;
+  --muted: #7b7c86;
+  --ok-bg: #e4f5ee;  --ok: #0f6e56;
+  --part-bg: #fbf1dd; --part: #8a5a00;
+  --no-bg: #fdecea;  --no: #b03a2e;
+  --dp-bg: #eceef4;  --dp: #4f5170;
+  font-family: inherit;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.ncbws .ws-label, .ncbws .ws-label label {
+  display: block; font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--label); margin-bottom: 10px;
+}
+
+/* ── Disclaimer (light blue, like the calculator's grouped fields), under the results ── */
+.ncbws .ws-notice {
+  background: var(--tint); border-radius: 8px; padding: 14px 18px;
+  font-size: 14px; color: var(--navy); margin-top: 28px;
+}
+.ncbws .ws-notice strong { font-weight: 700; }
+
+/* ── Search field: white input + navy block, like the calculator's select ── */
+.ncbws .ws-field {
+  display: flex; align-items: stretch; height: 60px; background: #fff; border: 1px solid var(--border);
+  border-radius: 4px; overflow: hidden; transition: border-color .15s, box-shadow .15s;
+}
+.ncbws .ws-field:focus-within { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(59,60,86,.10); }
+.ncbws .ws-field .ws-input {
+  -webkit-appearance: none; appearance: none;
+  flex: 1; min-width: 0; height: 100%; margin: 0; border: none; border-radius: 0; box-shadow: none;
+  outline: none; background: transparent; padding: 0 20px;
+  font: inherit; font-size: 17px; line-height: normal; color: var(--ink);
+}
+.ncbws .ws-field .ws-input::placeholder { color: #a3a5b8; opacity: 1; }
+.ncbws .ws-field .ws-input::-webkit-search-cancel-button { -webkit-appearance: none; display: none; }
+.ncbws .ws-field .ws-clear {
+  -webkit-appearance: none; appearance: none;
+  flex: none; width: 44px; height: auto; min-width: 0; margin: 0; padding: 0;
+  border: none; border-radius: 0; box-shadow: none; background: none;
+  color: var(--muted); font: inherit; font-size: 22px; line-height: 1; cursor: pointer; display: none;
+}
+.ncbws .ws-field .ws-clear.ws-on { display: block; }
+.ncbws .ws-field .ws-clear:hover { color: var(--navy); }
+.ncbws .ws-field .ws-icon {
+  flex: none; align-self: stretch; width: 64px; height: auto; margin: 0;
+  background: var(--navy); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.ncbws .ws-field .ws-icon svg { display: block; width: 20px; height: 20px; }
+
+/* ── Results ── */
+.ncbws .ws-count { margin: 26px 0 10px; }
+.ncbws .ws-results { margin-top: 12px; border: 1px solid var(--border); border-radius: 4px; background: #fff; overflow: hidden; }
+.ncbws .ws-count:not([hidden]) + .ws-results { margin-top: 0; }
+.ncbws .ws-results:empty { display: none; }
+.ncbws .ws-row {
+  display: flex; align-items: center; gap: 14px; padding: 14px 18px;
+  border-bottom: 1px solid var(--line); cursor: pointer; transition: background .1s;
+}
+.ncbws .ws-item:last-child .ws-row, .ncbws .ws-item.ws-open .ws-row { border-bottom: none; }
+.ncbws .ws-item:last-child.ws-open .ws-detail { border-bottom: none; }
+.ncbws .ws-row:hover, .ncbws .ws-item.ws-hl .ws-row { background: #f6f8fb; }
+.ncbws .ws-txt { flex: 1; min-width: 0; }
+.ncbws .ws-t { font-weight: 600; font-size: 16px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ncbws .ws-s { font-size: 14px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ncbws .ws-chev { display: block; color: #b4b6c6; flex-shrink: 0; transition: transform .15s; }
+.ncbws .ws-item.ws-open .ws-chev { transform: rotate(180deg); }
+
+.ncbws .ws-tag {
+  flex-shrink: 0; font-size: 12px; font-weight: 600; line-height: 1.4; padding: 5px 11px; border-radius: 999px; white-space: nowrap;
+}
+.ncbws .ws-y { background: var(--ok-bg); color: var(--ok); }
+.ncbws .ws-p { background: var(--part-bg); color: var(--part); }
+.ncbws .ws-n { background: var(--no-bg); color: var(--no); }
+.ncbws .ws-d { background: var(--dp-bg); color: var(--dp); }
+
+/* ── Detail (opens under its row) ── */
+.ncbws .ws-detail { display: none; padding: 4px 18px 20px; border-bottom: 1px solid var(--line); background: #fff; }
+.ncbws .ws-item.ws-open .ws-detail { display: block; }
+.ncbws .ws-verdict { border-radius: 8px; padding: 12px 16px; font-size: 14px; margin-bottom: 18px; }
+.ncbws .ws-dl { display: grid; grid-template-columns: 130px 1fr; gap: 10px 16px; font-size: 14px; margin: 0; }
+.ncbws .ws-dl dt { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--label); padding-top: 2px; }
+.ncbws .ws-dl dd { color: var(--ink); overflow-wrap: anywhere; margin: 0; }
+.ncbws .ws-code { font-family: ui-monospace, Consolas, monospace; font-size: 13px; }
+.ncbws .ws-more {
+  -webkit-appearance: none; appearance: none; background: none; border: none; box-shadow: none; margin: 0; padding: 0; height: auto;
+  font: inherit; font-size: 13px; color: var(--navy); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; cursor: pointer;
+}
+.ncbws .ws-none { color: var(--muted); }
+.ncbws .ws-dl a, .ncbws .ws-empty > a { color: var(--navy); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.ncbws .ws-verdict .ws-offices a { color: inherit; }
+
+/* ── Not found / states ── */
+.ncbws .ws-empty { margin-top: 12px; background: var(--tint); border-radius: 8px; padding: 18px; font-size: 15px; color: var(--navy); }
+.ncbws .ws-empty b { display: block; margin-bottom: 4px; }
+.ncbws .ws-ways { margin: 10px 0 0 20px; padding: 0; list-style: disc; }
+.ncbws .ws-ways li { margin: 0 0 6px; padding: 0; }
+.ncbws .ws-ways strong { font-weight: 600; }
+.ncbws .ws-ways a { color: var(--navy); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.ncbws .ws-offices { margin-top: 10px; font-size: 14px; }
+.ncbws .ws-offices a { color: var(--navy); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; margin-right: 12px; white-space: nowrap; }
+.ncbws .ws-state { padding: 28px 18px; text-align: center; color: var(--muted); font-size: 15px; }
+
+
+@media (max-width: 560px) {
+  .ncbws .ws-field { height: 54px; }
+  .ncbws .ws-field .ws-input { padding: 0 14px; font-size: 16px; }
+  .ncbws .ws-field .ws-icon { width: 52px; }
+  .ncbws .ws-row { padding: 12px 14px; gap: 10px; }
+  .ncbws .ws-chev { display: none; }
+  .ncbws .ws-detail { padding: 4px 14px 18px; }
+  .ncbws .ws-dl { grid-template-columns: 1fr; gap: 2px; }
+  .ncbws .ws-dl dd { margin-bottom: 10px; }
+}
