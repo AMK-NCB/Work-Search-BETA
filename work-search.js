@@ -20,7 +20,7 @@
 
   var VERDICT = {
     y: { tag: "Yes",
-         body: "NCB can clear this song for productions within NCB’s mandate." },
+         body: "NCB can clear this song for usage within NCB’s mandate." },
     p: { tag: "Partially", askIceNo: true,
          body: "NCB represents some, but not all, of the rights holders in this song. Email the ICE work no. to your local NCB office for further details." },
     n: { tag: "No", askIceNo: true,
