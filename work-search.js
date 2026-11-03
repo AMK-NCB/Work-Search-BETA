@@ -25,6 +25,9 @@
          body: "NCB represents some, but not all, of the rights holders in this song. Email the ICE work no. to your local NCB office and we will tell you what you need to clear the rest." },
     n: { tag: "No", askIceNo: true,
          body: "We can’t confirm that NCB can clear this song. Email the ICE work no. to your local NCB office and we will check it for you." },
+    // A "No" song with no ICE work no. yet (not registered), so there is no number to send
+    nr: { tag: "No",
+         body: "We can’t confirm that NCB can clear this song. It isn’t registered yet, so email the title and songwriters to your local NCB office and we will check it for you." },
     d: { tag: "Public domain",
          body: "This song is marked as public domain. Arrangements, translations and lyrics can still be protected, so check the version you use." }
   };
@@ -168,11 +171,12 @@
   }
 
   function detailHtml(w) {
-    var v = VERDICT[w.verdict];
+    var unregistered = w.key.indexOf("NR-") === 0; // songs added from pre-clearance that have no ICE work no. yet
+    var v = VERDICT[unregistered && w.verdict === "n" ? "nr" : w.verdict];
     return '<div class="ws-verdict ws-' + w.verdict + '">' + v.body +
-      (v.askIceNo ? '<div class="ws-offices">' + officeLinks() + '</div>' : '') + '</div>' +
+      (v.askIceNo || unregistered && w.verdict === "n" ? '<div class="ws-offices">' + officeLinks() + '</div>' : '') + '</div>' +
       '<dl class="ws-dl">' +
-      '<dt>ICE work no.</dt><dd><span class="ws-code">' + esc(w.key) + '</span></dd>' +
+      '<dt>ICE work no.</dt><dd>' + (unregistered ? '<span class="ws-none">Not registered</span>' : '<span class="ws-code">' + esc(w.key) + '</span>') + '</dd>' +
       '<dt>Songwriters</dt><dd>' + listMore(w.writers, 8) + '</dd>' +
       '<dt>Artists</dt><dd>' + listMore(w.artists, 6) + '</dd>' +
       (w.alt.length ? '<dt>Also known as</dt><dd>' + listMore(w.alt, 4) + '</dd>' : '') +
