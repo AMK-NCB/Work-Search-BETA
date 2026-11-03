@@ -22,7 +22,7 @@
     y: { tag: "Yes",
          body: "NCB can clear this song for productions within NCB’s mandate." },
     p: { tag: "Partially", askIceNo: true,
-         body: "NCB represents some, but not all, of the rights holders in this song. Email the ICE work no. to your local NCB office and we will tell you what you need to clear the rest." },
+         body: "NCB represents some, but not all, of the rights holders in this song. Email the ICE work no. to your local NCB office for further details." },
     n: { tag: "No", askIceNo: true,
          body: "We can’t confirm that NCB can clear this song. Email the ICE work no. to your local NCB office and we will check it for you." },
     // A "No" song with no ICE work no. yet (not registered), so there is no number to send
