@@ -145,10 +145,12 @@
       }
       return out;
     }
-    var hits = run(false);
-    if (!hits.length) hits = run(true);
+    var hits = run(false), fuzzy = false;
+    if (!hits.length) { hits = run(true); fuzzy = true; }
     hits.sort(function (a, b) { return b.s - a.s || a.w.title.localeCompare(b.w.title); });
-    return hits.map(function (h) { return h.w; });
+    var result = hits.map(function (h) { return h.w; });
+    result.fuzzy = fuzzy; // only near-matches (typo tolerance) were found
+    return result;
   }
 
   // ── Rendering ─────────────────────────────────────────────────────────────
@@ -190,8 +192,24 @@
     $results.innerHTML = '<div class="ws-state">' + text + '</div>';
   }
 
+  // The two ways to ask us about a song we don't list (used when nothing is found, and under every result list)
+  function waysHtml() {
+    return '<ul class="ws-ways">' +
+        '<li><strong>One or two songs:</strong> email us the song’s ISWC code. You can look it up in ' + kodaLink("Koda’s work database") + '.</li>' +
+        '<li><strong>A longer list:</strong> send us a tentative <a href="' + CUE_SHEET + '">NCB cue sheet</a> for your production, with the ISRC filled in for each song.</li>' +
+      '</ul>' +
+      '<div class="ws-offices">' + officeLinks() + '</div>';
+  }
+
+  // Shown above the results when only near-matches were found; created here so the Squarespace block needn't change
+  var $note = document.createElement("p");
+  $note.className = "ws-note";
+  $note.hidden = true;
+  $count.parentNode.insertBefore($note, $count);
+
   function render(q) {
     $empty.innerHTML = "";
+    $note.hidden = true;
     hl = -1;
     if (!q) { $results.innerHTML = ""; $count.hidden = true; shown = []; return; }
     if (status === "loading") return showState("Loading songs…");
@@ -202,13 +220,17 @@
       $results.innerHTML = ""; $count.hidden = true;
       $empty.innerHTML = '<div class="ws-empty"><b>We couldn’t find “' + esc(q) + '”</b>' +
         'That doesn’t necessarily mean we can’t clear it. Send it to your local NCB office and we will check it for you:' +
-        '<ul class="ws-ways">' +
-          '<li><strong>One or two songs:</strong> email us the song’s ISWC code. You can look it up in ' + kodaLink("Koda’s work database") + '.</li>' +
-          '<li><strong>A longer list:</strong> send us a tentative <a href="' + CUE_SHEET + '">NCB cue sheet</a> for your production, with the ISRC filled in for each song.</li>' +
-        '</ul>' +
-        '<div class="ws-offices">' + officeLinks() + '</div></div>';
+        waysHtml() + '</div>';
       return;
     }
+    if (all.fuzzy) {
+      $note.innerHTML = '<strong>No exact match for “' + esc(q) + '”.</strong> Showing similar songs:';
+      $note.hidden = false;
+    }
+    $empty.innerHTML = '<div class="ws-help">' +
+      '<button type="button" class="ws-help-toggle" aria-expanded="false">Not the song you’re looking for?</button> ' +
+      'Send it to us and we will check it for you.' +
+      '<div class="ws-help-body" hidden>' + waysHtml() + '</div></div>';
     $count.hidden = false;
     $count.textContent = all.length > MAX_RESULTS ? "Top " + MAX_RESULTS + " of " + all.length + " songs" : all.length + (all.length === 1 ? " song" : " songs");
     $results.innerHTML = shown.map(function (w, i) {
@@ -219,8 +241,17 @@
           '<svg class="ws-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>' +
         '</div><div class="ws-detail"></div></div>';
     }).join("");
-    if (shown.length === 1) toggle(0);
+    // Open a single result straight away, unless it's only a near-match
+    if (shown.length === 1 && !all.fuzzy) toggle(0);
   }
+
+  $empty.addEventListener("click", function (e) {
+    var btn = e.target.closest(".ws-help-toggle");
+    if (!btn) return;
+    var body = btn.parentNode.querySelector(".ws-help-body");
+    body.hidden = !body.hidden;
+    btn.setAttribute("aria-expanded", String(!body.hidden));
+  });
 
   function toggle(i) {
     var item = $results.children[i];
