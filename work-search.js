@@ -207,6 +207,11 @@
   $note.hidden = true;
   $count.parentNode.insertBefore($note, $count);
 
+  // The disclaimer goes directly under the search box, so results can't push it out of view.
+  // Moved here because the block already on Squarespace has it at the bottom.
+  var $notice = root.querySelector(".ws-notice");
+  if ($notice) root.querySelector(".ws-field").after($notice);
+
   function render(q) {
     $empty.innerHTML = "";
     $note.hidden = true;

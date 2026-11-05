@@ -26,10 +26,10 @@
   color: var(--label); margin-bottom: 10px;
 }
 
-/* ── Disclaimer (light blue, like the calculator's grouped fields), under the results ── */
+/* ── Disclaimer (light blue, like the calculator's grouped fields), under the search box ── */
 .ncbws .ws-notice {
   background: var(--tint); border-radius: 8px; padding: 14px 18px;
-  font-size: 14px; color: var(--navy); margin-top: 28px;
+  font-size: 14px; color: var(--navy); margin-top: 14px;
 }
 .ncbws .ws-notice strong { font-weight: 700; }
 
